@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Egyptian Russian University - Register/Add/Drop Course</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    body {
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      background-color: #f7f7f7;
+      color: #000000;
+    }
+    
+    /* Table specific typography and padding matching the screenshot */
+    .portal-table th {
+      background-color: #bebebe;
+      color: #000000;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 5px 6px;
+      text-align: center;
+      white-space: nowrap;
+      border: none;
+    }
+
+    .portal-table td {
+      font-size: 11px;
+      padding: 4px 6px;
+      border-bottom: 1px solid #e3e3e3;
+      white-space: nowrap;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background-color: #ffffff;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .main-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-[12px] bg-[#f7f7f7]">
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed top-12 right-5 z-50 transform translate-y-[-150%] opacity-0 transition-all duration-300 max-w-sm bg-white border border-gray-300 shadow-xl rounded p-3 flex items-start gap-3 pointer-events-none">
+    <div id="toastIcon" class="mt-0.5 text-[#1976d2] text-sm">
+      <i class="fa-solid fa-circle-info"></i>
+    </div>
+    <div class="flex-1">
+      <p id="toastTitle" class="font-bold text-xs text-gray-900">System Notification</p>
+      <p id="toastMessage" class="text-xs text-gray-600 mt-0.5">Notification</p>
+    </div>
+    <button onclick="hideToast()" class="text-gray-400 hover:text-gray-600 text-xs ml-1">✕</button>
+  </div>
+
+  <div class="max-w-[1360px] mx-auto p-2 sm:p-4">
+    
+    <!-- 1. HEADER SECTION -->
+    <header class="bg-white px-4 py-2 sm:px-6 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      
+      <!-- Top Left: ERU Logo -->
+      <div class="flex items-center">
+        <img src="logo.png" alt="Egyptian Russian University" class="h-12 sm:h-14 md:h-[58px] object-contain">
+      </div>
+
+      <!-- Top Right: Welcome & Academic info -->
+      <div class="text-left md:text-right text-[11px] text-[#222222] space-y-0.5">
+        <p class="font-normal">
+          Welcome <span class="font-normal text-black">ahmed sameh youssef mohamed</span> | <span class="text-gray-600">Student View</span>
+        </p>
+        <p class="font-normal tracking-wide text-gray-800 text-[10px] md:text-[11px] uppercase">
+          FACULTY OF ARTIFICIAL INTELLIGENCE
+        </p>
+        <p class="font-normal text-gray-600 text-[11px]">
+          2026/2027 - Fall
+        </p>
+      </div>
+
+    </header>
+
+    <!-- 2. TITLE BAR -->
+    <div class="bg-[#4d4d4d] text-white px-3 sm:px-4 py-1.5 flex items-center justify-between shadow-xs">
+      <!-- Left side: 3 Green Bars + Page Title -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="showToast('Menu navigation toggled')" class="flex flex-col justify-center items-center gap-[3px] w-6 h-6 focus:outline-none" aria-label="Menu">
+          <span class="w-5 h-[3.5px] bg-[#68b52a] rounded-xs"></span>
+          <span class="w-5 h-[3.5px] bg-[#68b52a] rounded-xs"></span>
+          <span class="w-5 h-[3.5px] bg-[#68b52a] rounded-xs"></span>
+        </button>
+        <span class="text-[13px] md:text-[14px] font-normal tracking-wide text-white select-none">Register/Add/Drop Course</span>
+      </div>
+
+      <!-- Right side: 5 Small Green Circular Icons -->
+      <div class="flex items-center gap-1.5">
+        <!-- 1. Home -->
+        <button onclick="showToast('Navigating to Home...')" class="w-[22px] h-[22px] rounded-full bg-[#6db329] border border-white/90 text-white flex items-center justify-center text-[10px] hover:opacity-90 transition" title="Home">
+          <i class="fa-solid fa-house"></i>
+        </button>
+        <!-- 2. 'E' -->
+        <button onclick="showToast('ERU E-Learning Portal')" class="w-[22px] h-[22px] rounded-full bg-[#6db329] border border-white/90 text-white flex items-center justify-center font-bold text-[11px] hover:opacity-90 transition" title="E-Learning">
+          E
+        </button>
+        <!-- 3. 'E' -->
+        <button onclick="showToast('ERU Electronic Services')" class="w-[22px] h-[22px] rounded-full bg-[#6db329] border border-white/90 text-white flex items-center justify-center font-bold text-[11px] hover:opacity-90 transition" title="Exams & Services">
+          E
+        </button>
+        <!-- 4. Lock -->
+        <button onclick="showToast('Account Security & Password')" class="w-[22px] h-[22px] rounded-full bg-[#6db329] border border-white/90 text-white flex items-center justify-center text-[10px] hover:opacity-90 transition" title="Security">
+          <i class="fa-solid fa-lock"></i>
+        </button>
+        <!-- 5. Logout / Exit -->
+        <button onclick="showToast('Logout Session')" class="w-[22px] h-[22px] rounded-full bg-[#6db329] border border-white/90 text-white flex items-center justify-center text-[10px] hover:opacity-90 transition" title="Sign Out">
+          <i class="fa-solid fa-power-off"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3. MAIN CONTENT CARD (White background with light grey outlines) -->
+    <main class="bg-white border border-[#d5d5d5] rounded-none sm:rounded-[3px] p-4 sm:p-5 mt-3 shadow-none main-card">
+      
+      <!-- SECTION A: Student Data -->
+      <section class="mb-2">
+        <!-- Title with two green dots -->
+        <div class="flex items-center gap-1.5 mb-2.5">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#62af27] flex-shrink-0"></span>
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#62af27] flex-shrink-0"></span>
+          <h2 class="text-[12px] font-normal text-black">Student Data</h2>
+        </div>
+
+        <!-- 2-Column Grid with Vertically Aligned Colons -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-1 text-[12px] text-black">
+          
+          <!-- Left Column -->
+          <div class="space-y-1">
+            <div class="flex">
+              <span class="w-36 font-normal text-black flex-shrink-0">Student Name</span>
+              <span class="text-black mr-2">:</span>
+              <span class="text-black font-normal">ahmed sameh youssef mohamed</span>
+            </div>
+            <div class="flex">
+              <span class="w-36 font-normal text-black flex-shrink-0">College</span>
+              <span class="text-black mr-2">:</span>
+              <span class="text-black font-normal">Faculty Of Artificial intelligence</span>
+            </div>
+            <div class="flex">
+              <span class="w-36 font-normal text-black flex-shrink-0">Student Major</span>
+              <span class="text-black mr-2">:</span>
+              <span class="text-black font-normal"></span>
+            </div>
+            <div class="flex">
+              <span class="w-36 font-normal text-black flex-shrink-0">Enrollment Status</span>
+              <span class="text-black mr-2">:</span>
+              <span class="text-black font-normal">Enrolled</span>
+            </div>
+            <div class="flex">
+              <span class="w-36 font-normal text-black flex-shrink-0">Total Passed CH</span>
+              <span class="text-black mr-2">:</span>
+              <span class="text-black font-normal">34.00</span>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-1">
+            <div class="flex">
+              <span class="w-36 font-normal text-black flex-shrink-0">Scientific Degree</span>
+              <span class="text-black mr-2">:</span>
+              <span class="text-black font-normal">B.Sc.</span>
+            </div>
+            <div class="flex">
+              <span class="w-36 font-normal text-black flex-shrink-0">Level</span>
+              <span class="text-black mr-2">:</span>
+              <span class="text-black font-normal">Level Two</span>
+            </div>
+            <div class="flex">
+              <span class="w-36 font-normal text-black flex-shrink-0">Academic Status</span>
+              <span class="text-black mr-2">:</span>
+              <span class="text-black font-normal">Good Standing</span>
+            </div>
+            <div class="flex">
+              <span class="w-36 font-normal text-black flex-shrink-0">CGPA</span>
+              <span class="text-black mr-2">:</span>
+              <span class="text-black font-normal">3.65</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Faint separator line -->
+      <div class="border-t border-[#e8e8e8] my-3"></div>
+
+      <!-- SECTION B: Academic Data -->
+      <section class="mb-2">
+        <!-- Title with two green dots -->
+        <div class="flex items-center gap-1.5 mb-2.5">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#62af27] flex-shrink-0"></span>
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#62af27] flex-shrink-0"></span>
+          <h2 class="text-[12px] font-normal text-black">Academic Data</h2>
+        </div>
+
+        <!-- Vertical list with aligned colons -->
+        <div class="space-y-1 text-[12px] text-black">
+          <div class="flex">
+            <span class="w-36 font-normal text-black flex-shrink-0">Academic Load</span>
+            <span class="text-black mr-2">:</span>
+            <span class="text-black font-normal">(CH From 1 To 15)</span>
+          </div>
+          <div class="flex">
+            <span class="w-36 font-normal text-black flex-shrink-0">Reg. Approved</span>
+            <span class="text-black mr-2">:</span>
+            <span class="text-black font-normal">Yes</span>
+          </div>
+          <div class="flex">
+            <span class="w-36 font-normal text-black flex-shrink-0">Registered CH</span>
+            <span class="text-black mr-2">:</span>
+            <span class="text-black font-normal">19.00</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Blue Notice Line with info icon -->
+      <div class="flex items-center gap-1.5 mt-3 pt-2 text-[#1976d2] text-[12px]">
+        <svg class="w-4 h-4 text-[#1976d2] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+        </svg>
+        <span>You Can't Register new courses after Approving</span>
+      </div>
+
+      <!-- Faint separator line -->
+      <div class="border-t border-[#e8e8e8] my-3"></div>
+
+      <!-- SECTION C: Registered Courses (Table) -->
+      <section class="mb-5">
+        <!-- Title with two green dots -->
+        <div class="flex items-center gap-1.5 mb-2.5">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#62af27] flex-shrink-0"></span>
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#62af27] flex-shrink-0"></span>
+          <h2 class="text-[12px] font-normal text-black">Registered Courses</h2>
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto border border-[#c5c5c5]">
+          <table class="w-full border-collapse portal-table">
+            <thead>
+              <tr>
+                <th class="w-8">[Select]</th>
+                <th>Course Code</th>
+                <th class="text-center min-w-[190px]">Course Title</th>
+                <th>CH</th>
+                <th>Repeat</th>
+                <th>Status</th>
+                <th>Fee Amount</th>
+                <th>Payment</th>
+                <th>Teaching Method</th>
+                <th>Delete Section</th>
+                <th>Section</th>
+                <th>Notes</th>
+                <th class="min-w-[80px]">Time Table</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: -CS201 Object oriented Programming (LAB) -->
+              <tr class="bg-white">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-CS201')" class="text-[#0055cc] underline">-CS201</a></td>
+                <td class="text-center">Object oriented Programming</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LAB</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-CS201', 'LAB', 'lv2sec1')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">lv2sec1</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" onclick="openScheduleInfo('-CS201', 'LAB', 'lv2sec1')" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2: -CS201 Object oriented Programming (LEC) -->
+              <tr class="bg-[#f0f2f5]">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-CS201')" class="text-[#0055cc] underline">-CS201</a></td>
+                <td class="text-center">Object oriented Programming</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LEC</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-CS201', 'LEC', 'lv2GroupB')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">lv2GroupB</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" onclick="openScheduleInfo('-CS201', 'LEC', 'lv2GroupB')" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 3: -CS202 Signal and System (LEC) -->
+              <tr class="bg-white">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-CS202')" class="text-[#0055cc] underline">-CS202</a></td>
+                <td class="text-center">Signal and System</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LEC</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-CS202', 'LEC', 'Lv2-Group C')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">Lv2-Group C</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" onclick="openScheduleInfo('-CS202', 'LEC', 'Lv2-Group C')" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 4: -CS202 Signal and System (LAB) -->
+              <tr class="bg-[#f0f2f5]">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-CS202')" class="text-[#0055cc] underline">-CS202</a></td>
+                <td class="text-center">Signal and System</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LAB</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-CS202', 'LAB', 'Lv 2 - Sec 16')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">Lv 2 - Sec 16</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" onclick="openScheduleInfo('-CS202', 'LAB', 'Lv 2 - Sec 16')" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 5: Course 3 LEC -->
+              <tr class="bg-white">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-ELC101')" class="text-[#0055cc] underline">-ELC101</a></td>
+                <td class="text-center">physics</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LEC</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-ELC101', 'LEC', 'Lv 2 - Group C')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">Lv 2 - Group C</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 6: Course 3 LAB -->
+              <tr class="bg-[#f0f2f5]">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-ELC101')" class="text-[#0055cc] underline">-ELC101</a></td>
+                <td class="text-center">physics</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LAB</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-ELC101', 'LAB', 'Lv 2 - Sec 14')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">Lv 2 - Sec 14</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 7: -HM003 Human rights& anticorruption (LEC) -->
+              <tr class="bg-white">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-HM003')" class="text-[#0055cc] underline">-HM003</a></td>
+                <td class="text-center">Human rights& anticorruption</td>
+                <td class="text-center">2.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LEC</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-HM003', 'LEC', 'Lv 2 - Group B,Lv 2 - Group C')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">Lv 2 - Group B,Lv 2 - Group C</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 8: -HM004 Russian language 1 (LEC) -->
+              <tr class="bg-[#f0f2f5]">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-HM004')" class="text-[#0055cc] underline">-HM004</a></td>
+                <td class="text-center">Russian language 1</td>
+                <td class="text-center">2.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LEC</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-HM004', 'LEC', 'Lv 2 - Group A')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">Lv 2 - Group A</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 9: -IS201 Database Systems (LEC) -->
+              <tr class="bg-white">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-IS201')" class="text-[#0055cc] underline">-IS201</a></td>
+                <td class="text-center">Database Systems</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LEC</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-IS201', 'LEC', 'group A')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">group A</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 10: -IS201 Database Systems (LAB) -->
+              <tr class="bg-[#f0f2f5]">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-IS201')" class="text-[#0055cc] underline">-IS201</a></td>
+                <td class="text-center">Database Systems</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LAB</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-IS201', 'LAB', 'lvl2sec19')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">lvl2sec19</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 11: -IS202 system analysis and design (LEC) -->
+              <tr class="bg-white">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-IS202')" class="text-[#0055cc] underline">-IS202</a></td>
+                <td class="text-center">system analysis and design</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LEC</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-IS202', 'LEC', 'Lv2Group3')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">Lv2Group3</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 12: -IS202 system analysis and design (LAB) -->
+              <tr class="bg-[#f0f2f5]">
+                <td class="text-center"><input type="checkbox" class="w-3.5 h-3.5 rounded-xs border-gray-400"></td>
+                <td class="text-center"><a href="javascript:void(0)" onclick="openCourseInfo('-IS202')" class="text-[#0055cc] underline">-IS202</a></td>
+                <td class="text-center">system analysis and design</td>
+                <td class="text-center">3.00</td>
+                <td class="text-center">0</td>
+                <td class="text-center">A</td>
+                <td class="text-center"></td>
+                <td class="text-center text-[#2e7d32]">Yes</td>
+                <td class="text-center">LAB</td>
+                <td class="text-center">
+                  <button type="button" onclick="notifyLocked('-IS202', 'LAB', 'lv2sec18')" class="w-[17px] h-[17px] bg-[#d32f2f] text-white rounded-[2px] inline-flex items-center justify-center font-bold text-[10px] hover:bg-red-700 transition" title="Delete Section">✕</button>
+                </td>
+                <td class="text-center">lv2sec18</td>
+                <td class="text-center"></td>
+                <td class="text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <a href="javascript:void(0)" class="text-[#0055cc] underline text-[11px]">...</a>
+                    <span class="w-[17px] h-[17px] bg-[#f57c00] text-white rounded-[2px] inline-flex items-center justify-center text-[9px] cursor-pointer" title="View Schedule"><i class="fa-regular fa-calendar-days"></i></span>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 4. FOOTER BUTTONS (Khaki/Mustard Gold Buttons Centered) -->
+      <div class="mt-8 mb-4 flex justify-center items-center gap-3 no-print">
+        <button type="button" onclick="openSlipModal()" class="bg-[#cca852] hover:bg-[#c29e46] active:bg-[#b59239] text-[#222222] font-normal text-[12px] px-4 py-1.5 rounded-[3px] border border-[#a88d44] shadow-xs transition focus:outline-none">
+          Student Registration Form
+        </button>
+        <button type="button" onclick="window.print()" class="bg-[#cca852] hover:bg-[#c29e46] active:bg-[#b59239] text-[#222222] font-normal text-[12px] px-4 py-1.5 rounded-[3px] border border-[#a88d44] shadow-xs transition focus:outline-none">
+          Print Schedule
+        </button>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Registration Slip Modal -->
+  <div id="slipModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
+    <div class="bg-white max-w-2xl w-full border border-gray-400 p-6 text-xs text-gray-800">
+      <div class="flex items-center justify-between border-b pb-3 mb-4">
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="Egyptian Russian University" class="h-10 object-contain">
+          <div>
+            <h3 class="font-bold text-sm text-[#b71c1c]">Egyptian Russian University - ERU</h3>
+            <p class="text-gray-600">Faculty of Artificial Intelligence | Registration Slip</p>
+          </div>
+        </div>
+        <div class="text-right text-[11px] text-gray-500">
+          <p>Semester: Fall 2026/2027</p>
+          <p>Status: Approved</p>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 border p-3 mb-4 space-y-1">
+        <p><span class="font-semibold">Student Name:</span> ahmed sameh youssef mohamed</p>
+        <p><span class="font-semibold">Level / Major:</span> Level Two - Artificial Intelligence</p>
+        <p><span class="font-semibold">Academic Status:</span> Good Standing (CGPA: 3.65)</p>
+        <p><span class="font-semibold">Registered Hours:</span> 19.00 Credit Hours</p>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-3 border-t">
+        <button onclick="closeModal('slipModal')" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-gray-800">Close</button>
+        <button onclick="window.print()" class="px-3 py-1 bg-[#cca852] hover:bg-[#c29e46] text-black font-semibold rounded">Print</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMessage').textContent = msg;
+      toast.classList.remove('translate-y-[-150%]', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(hideToast, 3500);
+    }
+
+    function hideToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.remove('translate-y-0', 'opacity-100');
+      toast.classList.add('translate-y-[-150%]', 'opacity-0', 'pointer-events-none');
+    }
+
+    function notifyLocked(code, method, sec) {
+      showToast(`Cannot delete ${code} (${method} - ${sec}). Registration is already Approved.`);
+    }
+
+    function openCourseInfo(code) {
+      showToast(`Course Info: ${code} - Faculty of Artificial Intelligence`);
+    }
+
+    function openScheduleInfo(code, method, sec) {
+      showToast(`Schedule Slot: ${code} (${method} - ${sec})`);
+    }
+
+    function openSlipModal() {
+      document.getElementById('slipModal').classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+  </script>
+
+</body>
+</html>
